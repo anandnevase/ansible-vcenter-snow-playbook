@@ -1,0 +1,12 @@
+- hosts: servers
+  tasks:
+    - name: Gather vmware host facts
+      vmware_host_facts:
+        hostname: esxi_ip_or_hostname
+        username: username
+        password: password
+      register: vm_info
+      delegate_to: localhost
+    - name: VM info
+      debug:
+        var: '{{ vm_info }}'
