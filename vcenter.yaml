@@ -15,4 +15,4 @@
       register: vm_facts
 
     - debug:
-        var: vm_facts#.virtual_machines
+        var: vm_facts #.virtual_machines
