@@ -8,6 +8,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
+        folder: '/SharedDev/vm/Global Dev/avid'
         validate_certs: no
         vm_type: vm
       delegate_to: localhost
