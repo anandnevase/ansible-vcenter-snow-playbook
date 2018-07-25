@@ -3,7 +3,7 @@
 - include_vars: vars/avid_credentials.yaml
 
 - uri:
-    url: "https://'{{ avid_server }}':3623/GateKeeper/ControlPoint/ControlPoint@'{{ avid_server }}'/Nodes/list"
+    url: "https://{{ avid_server }}:3623/GateKeeper/ControlPoint/ControlPoint@{{ avid_server }}/Nodes/list"
     method: GET
     user: "{{ avid_username }}"
     password: "{{ avid_password }}"
