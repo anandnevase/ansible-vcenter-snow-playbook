@@ -58,7 +58,7 @@
           mac_address: '{{ ansible_default_ipv4.macaddress }}'
           host_name: '{{ ansible_hostname }}'
           fqdn: '{{ ansible_fqdn }}'
-          ram:  '{{ ram }}' #"{{ ansible_memtotal_mb }}"
+          #ram:  '{{ ram }}' #"{{ ansible_memtotal_mb }}"
           u_ram_gb: "{{ (ansible_memtotal_mb/1000) | round(0,'ceil') }}"
           u_ci_business_partner: '{{ business_partner[ansible_domain | lower] | default(omit) }}'
       #register: '{{ ansible_hostname }}'
