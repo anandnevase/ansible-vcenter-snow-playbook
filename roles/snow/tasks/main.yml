@@ -1,0 +1,64 @@
+---
+# tasks file for roles/snow
+- name: Load SNOW credentials
+  include_vars: vars/snow_credentials.yaml
+
+- name: Load Variables
+  include_vars: roles/snow/vars/variables.yaml
+
+- block:
+    - name: Check ServiceNow CI exist
+      delegate_to: localhost
+      snow_record:
+        username: "{{ snow_username }}"
+        password: "{{ snow_password }}"
+        instance: "{{ snow_instance }}"
+        state: present
+        number: '{{ ansible_hostname }}'
+        table: cmdb_ci_server
+        lookup_field: name
+  rescue:
+    - debug:
+        msg: ServiceNow CI ['{{ ansible_hostname }}'] doesn't exist
+
+    - name: Create ServiceNow CI
+      delegate_to: localhost
+      snow_record:
+        username: "{{ snow_username }}"
+        password: "{{ snow_password }}"
+        instance: "{{ snow_instance }}"
+        state: present
+        #number: '{{ ansible_hostname }}'
+        table: cmdb_ci_server
+        data:
+          name: '{{ ansible_hostname }}'
+  always:
+    - name: Update ServiceNow CI
+      delegate_to: localhost
+      snow_record:
+        username: "{{ snow_username }}"
+        password: "{{ snow_password }}"
+        instance: "{{ snow_instance }}"
+        state: present
+        number: '{{ ansible_hostname }}'
+        table: cmdb_ci_server
+        lookup_field: name  
+        data:
+          name: '{{ ansible_hostname }}'
+          disk_space : '{{ (ansible_mounts| map(attribute="size_total")|map("int")|sum(start=0)|filesizeformat).split(" ")[0] }}'
+          cpu_count: '{{ ansible_processor_vcpus }}'
+          cpu_core_thread: '{{ ansible_processor_threads_per_core }}'
+          #cpu_speed:
+          cpu_core_count: '{{ ansible_processor_cores }}'
+          dns_domain: '{{ ansible_domain }}'
+          os_version: '{{ ansible_distribution_major_version }}'
+          os: '{{ os[ansible_distribution | lower] | default(omit) }}'
+          os_service_pack: '{{ ansible_distribution_version }}'
+          ip_address: '{{ ansible_default_ipv4.address }}'
+          mac_address: '{{ ansible_default_ipv4.macaddress }}'
+          host_name: '{{ ansible_hostname }}'
+          fqdn: '{{ ansible_fqdn }}'
+          ram:  '{{ ram }}' #"{{ ansible_memtotal_mb }}"
+          u_ram_gb: "{{ (ansible_memtotal_mb/1000) | round(0,'ceil') }}"
+          u_ci_business_partner: '{{ business_partner[ansible_domain | lower] | default(omit) }}'
+      #register: '{{ ansible_hostname }}'

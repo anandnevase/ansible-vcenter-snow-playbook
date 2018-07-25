@@ -1,0 +1,20 @@
+---
+# tasks file for roles/avid
+- include_vars: vars/avid_credentials.yaml
+
+- uri:
+    url: "https://'{{ avid_server }}':3623/GateKeeper/ControlPoint/ControlPoint@'{{ avid_server }}'/Nodes/list"
+    method: GET
+    user: "{{ avid_username }}"
+    password: "{{ avid_password }}"
+    force_basic_auth: yes
+    status_code: 200
+  register: avid_vm_list
+
+
+- add_host:
+    name: '{{ item.fqdn.split(".")[0] | lower }}'
+    group: "avid_vms"
+    operational_status: '{{ item.status }}'
+    cpu_speed: '{{item.cpu_speed }}'
+  with_items: "{{ avid_vm_list.json[0:1] }}"

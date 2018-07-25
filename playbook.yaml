@@ -1,0 +1,11 @@
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - role: avid
+
+- hosts: avid_vms
+  connection: local
+  #remote_user:
+  #become: true
+  roles:
+    - role: snow

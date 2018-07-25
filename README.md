@@ -1,1 +1,1 @@
-# ansible-vcenter-snow-playbook
+# ansible-playbook
