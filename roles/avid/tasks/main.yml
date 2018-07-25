@@ -17,9 +17,10 @@
 
 
 - add_host:
-    name: '{{ item.fqdn.split(".")[0] | lower }}'
+    name: '{{ item.fqdn }}' #.split(".")[0] | lower
     group: "avid_vms"
     operational_status: '{{ item.status }}'
-    cpu_speed: '{{item.cpu_speed }}'
-  with_items: "{{ avid_vm_list.json }}"
-  when: 'name' in item.fqdn 
+    name: '{{ item.fqdn.split(".")[0] | lower }}'
+    #cpu_speed: '{{item.cpu_speed }}'
+  with_items: "{{ avid_vm_list.json[0:1] }}"
+  #when: 'name' in item.fqdn 
